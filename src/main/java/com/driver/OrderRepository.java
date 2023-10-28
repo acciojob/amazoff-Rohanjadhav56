@@ -68,8 +68,8 @@ public class OrderRepository {
 
     public static Integer getOrdersLeftAfterGivenTimeByPartnerId(String time, String partnerId) {
         String []t = time.split(":");
-        int hour = Integer.valueOf(t[0]);
-        int min = Integer.valueOf(t[1]);
+        int hour = Integer.parseInt(t[0]);
+        int min = Integer.parseInt(t[1]);
         int totalTime = hour*60 + min;
         int cnt = 0;
 
@@ -92,7 +92,11 @@ public class OrderRepository {
             }
 
         }
-        return (lastDelivery/60)+":"+(lastDelivery%60);
+        String HH = String.valueOf(lastDelivery/60);
+        if(HH.length()<2) HH = "0"+HH ;
+        String MM = String.valueOf(lastDelivery%60);
+        if(MM.length()<2) MM  = "0"+MM;
+        return HH+":"+MM;
 
     }
 
