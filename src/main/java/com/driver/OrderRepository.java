@@ -47,10 +47,10 @@ public class OrderRepository {
     }
 
     public static Integer getOrderByPartnerId(String partnerId) {
-        return deliveryPartnerListHashMap.get(partnerId).size();
+        return deliveryPartnerListHashMap.getOrDefault(deliveryPartnerListHashMap.get(partnerId),new ArrayList<>()).size();
     }
     public static List<String> getOrdersByPartnerId(String partnerId) {
-        return deliveryPartnerListHashMap.get(partnerId);
+        return deliveryPartnerListHashMap.getOrDefault(deliveryPartnerListHashMap.get(partnerId),new ArrayList<>());
     }
 
     public static List<String> getAllOrders() {
@@ -72,11 +72,15 @@ public class OrderRepository {
         int min = Integer.parseInt(t[1]);
         int totalTime = hour*60 + min;
         int cnt = 0;
+        List<String> orders = deliveryPartnerListHashMap.get(partnerId);
 
-        for (String order:deliveryPartnerListHashMap.get(partnerId)) {
-            if(orderMap.get(order).getDeliveryTime()>totalTime)
+        for (String order: orders) {
+            if(orderMap.containsKey(order))
             {
-                cnt++;
+               if(orderMap.get(order).getDeliveryTime() > totalTime)
+               {
+                   cnt++;
+               }
             }
 
         }
@@ -85,10 +89,14 @@ public class OrderRepository {
 
     public static String getLastDeliveryTimeByPartnerId(String partnerId) {
         int lastDelivery = 0;
-        for (String order:deliveryPartnerListHashMap.get(partnerId)) {
-            if(orderMap.get(order).getDeliveryTime()>lastDelivery)
+        List<String> orders = deliveryPartnerListHashMap.get(partnerId);
+        for (String order:orders) {
+            if(orderMap.containsKey(order))
             {
-                lastDelivery =orderMap.get(order).getDeliveryTime() ;
+                if(orderMap.get(order).getDeliveryTime() > lastDelivery)
+                {
+                    lastDelivery = orderMap.get(order).getDeliveryTime();
+                }
             }
 
         }
