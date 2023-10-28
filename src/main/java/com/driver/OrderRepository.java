@@ -16,17 +16,17 @@ public class OrderRepository {
    static  HashMap<String,List<String>> deliveryPartnerListHashMap = new HashMap<String, List<String>>();
    static HashMap<String,String> orderPartnerHashMap = new HashMap<>();
 
-    public void addOrder(Order order) {
+    public void addOrder(Order order) throws NullPointerException {
 
         orderMap.put(order.getId(), order);
     }
 
-    public void addPartner(String partnerId) {
+    public void addPartner(String partnerId) throws NullPointerException{
 
         deliveryPartnerHashMap.put(partnerId,new DeliveryPartner(partnerId));
     }
 
-    public void addOrderPartner(String orderId, String partnerId) {
+    public void addOrderPartner(String orderId, String partnerId)throws NullPointerException {
         if(orderMap.containsKey(orderId)&& deliveryPartnerHashMap.containsKey(partnerId))
         {
             orderPartnerHashMap.put(orderId,partnerId);
@@ -39,21 +39,21 @@ public class OrderRepository {
         deliveryPartner.setNumberOfOrders(orders.size());
 
     }
-    public static Order getOrderById(String orderId) {
+    public static Order getOrderById(String orderId)throws NullPointerException {
         return orderMap.get(orderId);
     }
-    public static DeliveryPartner getPartnerById(String partnerId) {
+    public static DeliveryPartner getPartnerById(String partnerId) throws NullPointerException{
         return deliveryPartnerHashMap.get(partnerId);
     }
 
-    public static Integer getOrderByPartnerId(String partnerId) {
+    public static Integer getOrderByPartnerId(String partnerId) throws NullPointerException{
         return deliveryPartnerListHashMap.getOrDefault(deliveryPartnerListHashMap.get(partnerId),new ArrayList<>()).size();
     }
-    public static List<String> getOrdersByPartnerId(String partnerId) {
+    public static List<String> getOrdersByPartnerId(String partnerId) throws NullPointerException{
         return deliveryPartnerListHashMap.getOrDefault(deliveryPartnerListHashMap.get(partnerId),new ArrayList<>());
     }
 
-    public static List<String> getAllOrders() {
+    public static List<String> getAllOrders() throws NullPointerException{
        List<String> orders = new ArrayList<>();
        for(String order : orderMap.keySet())
        {
@@ -62,11 +62,11 @@ public class OrderRepository {
        return orders;
     }
 
-    public static Integer getCountOfUnassignedOrders() {
+    public static Integer getCountOfUnassignedOrders() throws NullPointerException{
         return orderMap.size()-orderPartnerHashMap.size();
     }
 
-    public static Integer getOrdersLeftAfterGivenTimeByPartnerId(String time, String partnerId) {
+    public static Integer getOrdersLeftAfterGivenTimeByPartnerId(String time, String partnerId) throws NullPointerException{
         String []t = time.split(":");
         int hour = Integer.parseInt(t[0]);
         int min = Integer.parseInt(t[1]);
@@ -87,7 +87,7 @@ public class OrderRepository {
         return cnt;
     }
 
-    public static String getLastDeliveryTimeByPartnerId(String partnerId) {
+    public static String getLastDeliveryTimeByPartnerId(String partnerId) throws NullPointerException{
         int lastDelivery = 0;
         List<String> orders = deliveryPartnerListHashMap.get(partnerId);
         for (String order:orders) {
@@ -108,7 +108,7 @@ public class OrderRepository {
 
     }
 
-    public static void deletePartnerById(String partnerId) {
+    public static void deletePartnerById(String partnerId) throws NullPointerException{
 
        deliveryPartnerHashMap.remove(partnerId);
 
@@ -120,7 +120,7 @@ public class OrderRepository {
        }
     }
 
-    public static void deleteOrderById(String orderId) {
+    public static void deleteOrderById(String orderId)throws NullPointerException {
         orderMap.remove(orderId);
         String partnerId = orderPartnerHashMap.get(orderId);
         orderPartnerHashMap.remove(orderId);
