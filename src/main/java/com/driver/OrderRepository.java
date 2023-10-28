@@ -96,12 +96,12 @@ public class OrderRepository {
 
 
     public void addOrder(Order order) {
-        if(orderMap.containsKey(order.getId())) return;
+        if(order==null) return;
         orderMap.put(order.getId(), order);
     }
 
     public void addPartner(String partnerId) {
-        if(deliveryPartnerHashMap.containsKey(partnerId))
+        if(deliveryPartnerHashMap.containsKey(partnerId) || partnerId==null)
         {
             return;
         }
@@ -120,19 +120,26 @@ public class OrderRepository {
 
     }
     public static Order getOrderById(String orderId) {
-        return orderMap.get(orderId);
+        return orderMap.getOrDefault(orderId,null);
     }
     public static DeliveryPartner getPartnerById(String partnerId) {
-        return deliveryPartnerHashMap.get(partnerId);
+        return deliveryPartnerHashMap.getOrDefault(partnerId,null);
     }
     public static Integer getOrderByPartnerId(String partnerId) {
-        return deliveryPartnerListHashMap.getOrDefault(deliveryPartnerListHashMap.get(partnerId),new ArrayList<>()).size();
+        if(deliveryPartnerListHashMap.containsKey(partnerId))
+        {
+            return deliveryPartnerListHashMap.get(partnerId).size();
+        }
+        return 0;
     }
     public static List<String> getOrdersByPartnerId(String partnerId) {
         return deliveryPartnerListHashMap.getOrDefault(deliveryPartnerListHashMap.get(partnerId),new ArrayList<>());
     }
     public static List<String> getAllOrders() {
-        return (List<String>) orderMap.keySet();
+        if(orderMap.size()>0) {
+            return (List<String>) orderMap.keySet();
+        }
+        return new ArrayList<String>();
     }
 
 }
